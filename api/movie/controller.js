@@ -2,9 +2,9 @@ const movieModel = require('./model');
 const API_KEY = "b5dae82479460f3722fefef66976b8a1";
 const axios = require('axios');
 
-const createMovie = async(root, {movieID,title,poster_path,backdrop_path,overview,vote_average,release_date}) => {
+const createMovie = async(root, {movieID,title,poster_path,backdrop_path,overview,vote_average,release_date,keyYt}) => {
     try{
-        const newMovie = await movieModel.create({movieID,title,poster_path,backdrop_path,overview,vote_average,release_date});
+        const newMovie = await movieModel.create({movieID,title,poster_path,backdrop_path,overview,vote_average,release_date,keyYt});
         return newMovie;
     }catch(err) {
         console.log(err);

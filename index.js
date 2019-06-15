@@ -12,7 +12,7 @@ const {PubSub} = require('graphql-yoga');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost/music',{ useNewUrlParser: true },(err) => {
+mongoose.connect('mongodb://admin:admin12345@ds137827.mlab.com:37827/dcweb',{ useNewUrlParser: true },(err) => {
     if(err) console.log("Connect DB Failed");
     else console.log("Connect DB Success");
 })

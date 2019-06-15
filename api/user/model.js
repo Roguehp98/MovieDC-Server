@@ -10,7 +10,7 @@ const fvSchema = new Schema({
 
 const UserSchema = new Schema({
     username: {type: String,unique: true,require: true},
-    password: {type: String,unique: true,require: true},
+    password: {type: String,require: true},
     name: {type: String,require: true},
     gender: {type: String},
     age: {type: Number},

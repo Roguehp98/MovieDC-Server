@@ -34,8 +34,7 @@ const createUser = async(root, {username, password,name,gender,age},{pubsub}) =>
         }})
         return newUser;
     }catch (err){
-        console.log(err);
-        throw new Error(err.message);
+        return null;
     }
 }
 

@@ -96,7 +96,7 @@ const typeDefs = `
             poster_path: String!,
             backdrop_path: String!,
             overview: String!,
-            vote_average: Int!,
+            vote_average: String!,
             release_date: String!,
             keyYt: String!,
         ): Movie,

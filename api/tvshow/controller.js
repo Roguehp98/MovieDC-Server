@@ -2,9 +2,9 @@ const API_KEY = "b5dae82479460f3722fefef66976b8a1";
 const axios = require('axios');
 const tvModel = require('./model');
 
-const createTvshow = async(root, {idTv,title,poster_path}) => {
+const createTvshow = async(root, {idTv,title,poster_path,keyYt}) => {
     try{
-        const newTvshow = await tvModel.create({idTv,title,poster_path});
+        const newTvshow = await tvModel.create({idTv,title,poster_path,keyYt});
         return newTvshow;
     }catch(err) {
         console.log(err);
