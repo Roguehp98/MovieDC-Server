@@ -1,6 +1,8 @@
 const userModel = require('./model');
 const mongoose = require('mongoose');
 
+const CREATE_USER = 'CREATE_USER';
+
 const users = async(root) => {
     try {
         const users = await userModel.find({});
@@ -21,9 +23,15 @@ const user = async(root,{idUser}) => {
     }
 }
 
-const createUser = async(root, {username, password,name,gender,age}) => {
+const createUser = async(root, {username, password,name,gender,age},{pubsub}) => {
     try {
-        const newUser = await userModel.create({username, password,name,gender,age})
+        const newUser = await userModel.create({username, password,name,gender,age});
+        pubsub.publish(CREATE_USER,{createdUser: {
+            username,
+            name,
+            gender,
+            age
+        }})
         return newUser;
     }catch (err){
         console.log(err);

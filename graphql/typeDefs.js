@@ -137,7 +137,8 @@ const typeDefs = `
     }
     type Subscription {
         addListFavor: User,
-        removeListFavor: User
+        removeListFavor: User,
+        createdUser: User
     }
 ` 
 

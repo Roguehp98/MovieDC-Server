@@ -7,8 +7,9 @@ const {PubSub} = require('graphql-yoga');
 
 const ADD_LISTFV = 'ADD_LISTFV';
 const REMOVE_LISTFV = 'REMOVE_LISTFV';
+const CREATE_USER = 'CREATE_USER';
 
-const pubsub = new PubSub();
+// const pubsub = new PubSub();
  
 const resolvers = {
     Query: {
@@ -61,6 +62,9 @@ const resolvers = {
         },
         removeListFavor: {
             subscribe: (parent,args,{pubsub}) => pubsub.asyncIterator(REMOVE_LISTFV)
+        },
+        createdUser: {
+            subscribe: (parent,args,{pubsub}) => pubsub.asyncIterator(CREATE_USER)
         }
     }
 }
