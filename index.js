@@ -60,8 +60,9 @@ server.express.use(session({
   // })
 }))
 // server.express.use(cors())
-
-
+server.express.get('/', (req,res) => {
+  res.send('DC Server');
+})
 
 const opts = {
     port: 6969,
