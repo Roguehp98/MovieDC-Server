@@ -63,9 +63,10 @@ server.express.use(session({
 server.express.use('/', (req,res) => {
   res.send('DC Server');
 })
+const port  = process.env.PORT || 6969;
 
 const opts = {
-    port: 6969,
+    port: port,
     cors: {
       credentials: true,
       origin: ['http://localhost:3000'] // your frontend url.
