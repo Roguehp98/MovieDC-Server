@@ -1,11 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const {ApolloServer} = require('apollo-server-express');
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
 const session = require('express-session');
 const { GraphQLServer } = require('graphql-yoga');
-const MongoStore = require('connect-mongo')(session);
 const cors = require('cors');
 const permissions = require('./graphql/authorize');
 const {PubSub} = require('graphql-yoga');
@@ -54,13 +52,9 @@ server.express.use(session({
       httpOnly: false,
       maxAge: 7*24*60*60*1000,
   }
-  // store: new MongoStore({
-  //   mongooseConnection:mongoose.connection
-  //   //other advanced options
-  // })
 }))
 // server.express.use(cors())
-server.express.use('/', (req,res) => {
+server.express.use('/graphql', (req,res) => {
   res.send('DC Server');
 })
 const port  = process.env.PORT || 6969;
