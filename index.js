@@ -31,7 +31,7 @@ const server = new GraphQLServer({
 
 const corOptions = {
   credentials: true,
-  origin: "https://dc-client.herokuapp.com/"
+  origin: "https://dc-client.herokuapp.com"
   // 'http://localhost:3000'
 }
 //change in Playground setting: "request.credentials": "include"
@@ -65,7 +65,7 @@ const opts = {
     playground: '/graphql',
     cors: {
       credentials: true,
-      origin: ['https://dc-client.herokuapp.com/']
+      origin: ['https://dc-client.herokuapp.com']
       // ['http://localhost:3000'] // your frontend url.
     }
   };
