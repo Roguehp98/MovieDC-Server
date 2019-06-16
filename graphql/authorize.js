@@ -12,7 +12,7 @@ const isLoggedIn = async (resolve, parent, args,{req}, ctx, info) => {
 const permissions = {
   Query: {
     secured: isLoggedIn,
-    user: isLoggedIn
+    // user: isLoggedIn
   },
   Mutation: {
     updateUser: isLoggedIn,
