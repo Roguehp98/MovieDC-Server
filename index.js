@@ -54,7 +54,7 @@ server.express.use(session({
   }
 }))
 // server.express.use(cors())
-server.express.use('/', (req,res) => {
+server.use('/a', (req,res) => {
   res.send('DC Server');
 })
 const port  = process.env.PORT || 6969;
