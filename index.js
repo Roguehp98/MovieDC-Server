@@ -31,12 +31,12 @@ const server = new GraphQLServer({
 
 const corOptions = {
   credentials: true,
-  // origin: 'http://localhost:3000'
+  origin: 'http://localhost:3000'
 }
 //change in Playground setting: "request.credentials": "include"
 server.express.use(cors(corOptions));
 server.express.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
@@ -64,7 +64,7 @@ const opts = {
     playground: '/graphql',
     cors: {
       credentials: true,
-      // origin: ['http://localhost:3000'] // your frontend url.
+      origin: ['http://localhost:3000'] // your frontend url.
     }
   };
 
