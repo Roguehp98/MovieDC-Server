@@ -54,13 +54,14 @@ server.express.use(session({
   }
 }))
 // server.express.use(cors())
-server.express.use('/graphql', (req,res) => {
+server.express.use('/', (req,res) => {
   res.send('DC Server');
 })
 const port  = process.env.PORT || 6969;
 
 const opts = {
     port: port,
+    playground: '/graphql',
     cors: {
       credentials: true,
       origin: ['http://localhost:3000'] // your frontend url.

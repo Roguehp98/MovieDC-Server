@@ -31,7 +31,7 @@ const resolvers = {
             // if(req.session.user) return true;
             // else
             // req.session.destroy();
-            console.log(req.session.user)
+            // console.log(req.session.user)
              return false;
         },
         //auth
