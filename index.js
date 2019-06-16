@@ -74,5 +74,5 @@ const opts = {
   };
 
 server.start(opts, () => {
-    console.log("Server is running at port 6969")
+    console.log("Server is running at " + port )
 })
