@@ -1,11 +1,19 @@
+
 const typeDefs = `
+    scalar Date
+    type Comments {
+        title: String!,
+        owner: User,
+        createdAt: Date,
+        updatedAt: Date
+    }
     type ListFv {
         id: ID!,
         name: String!,
         type: String!,
     }
     type User {
-        id: ID!,
+        id: String!,
         username: String!, 
         name: String!,
         password: String!,
@@ -16,12 +24,16 @@ const typeDefs = `
     type Movie {
         movieID: String!,
         title: String!,
+        genres: [String!],
+        homepage: String!,
         poster_path: String!,
         backdrop_path: String!,
         overview: String!,
+        runtime: String!,
         vote_average: String!,
         release_date: String!,
         keyYt: String!,
+        comments: [Comments]
     }
     type MovieAPI {
         id: String!,
@@ -93,9 +105,12 @@ const typeDefs = `
         createMovie(
             movieID: String!,
             title: String!,
+            genres: [String!],
+            homepage: String!,
             poster_path: String!,
             backdrop_path: String!,
             overview: String!,
+            runtime: String!,
             vote_average: String!,
             release_date: String!,
             keyYt: String!,
@@ -104,15 +119,20 @@ const typeDefs = `
             id: String!,
         ): String,
         updateMovie(
-            id: String!,
-            title: String!,
+            id: String,
+            title: String,
+            genres: [String],
+            homepage: String,
             poster_path: String,
             backdrop_path: String,
             overview: String,
+            runtime: String,
             vote_average: String,
             release_date: String,
             keyYt: String,
         ): Movie,
+        addComment(idMovie: String!,idUser: String!,contentCmt: String!): Movie
+        deleteComment(idMovie: String,idUser: String,time: String): Movie
         
         createTvshow(
             idTv: String!,
@@ -138,7 +158,9 @@ const typeDefs = `
     type Subscription {
         addListFavor: User,
         removeListFavor: User,
-        createdUser: User
+        createdUser: User,
+        addedComment: Movie,
+        removedComment: Movie
     }
 ` 
 

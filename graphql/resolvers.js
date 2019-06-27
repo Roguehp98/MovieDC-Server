@@ -8,6 +8,8 @@ const {PubSub} = require('graphql-yoga');
 const ADD_LISTFV = 'ADD_LISTFV';
 const REMOVE_LISTFV = 'REMOVE_LISTFV';
 const CREATE_USER = 'CREATE_USER';
+const ADD_COMMENT = 'ADD_COMMENT';
+const REMOVE_COMMENT = 'REMOVE_COMMENT';
 
 // const pubsub = new PubSub();
  
@@ -23,6 +25,7 @@ const resolvers = {
         getInfoMovie: movieController.getInfoMovie,
         getAllKeyYt: movieController.getAllKeyYt,
         getMovieByID: movieController.getMovieByID,
+       
         //tvshow
         getAllTvshow: tvshowController.getAllTvshow,
         getTvshowByAPI: tvshowController.getTvshowByAPI,
@@ -45,6 +48,8 @@ const resolvers = {
         createMovie: movieController.createMovie,
         deleteMovie: movieController.deleteMovie,
         updateMovie: movieController.updateMovie,
+        addComment: movieController.addComment,
+        deleteComment: movieController.deleteComment,
         //tvshow
         createTvshow: tvshowController.createTvshow,
         deleteTvshow: tvshowController.deleteTvshow,
@@ -65,6 +70,12 @@ const resolvers = {
         },
         createdUser: {
             subscribe: (parent,args,{pubsub}) => pubsub.asyncIterator(CREATE_USER)
+        },
+        addedComment: {
+            subscribe: (parent,args,{pubsub}) => pubsub.asyncIterator(ADD_COMMENT)
+        },
+        removedComment: {
+            subscribe: (parent,args,{pubsub}) => pubsub.asyncIterator(REMOVE_COMMENT)
         }
     }
 }

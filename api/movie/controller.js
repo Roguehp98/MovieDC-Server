@@ -2,9 +2,12 @@ const movieModel = require('./model');
 const API_KEY = "b5dae82479460f3722fefef66976b8a1";
 const axios = require('axios');
 
-const createMovie = async(root, {movieID,title,poster_path,backdrop_path,overview,vote_average,release_date,keyYt}) => {
+const ADD_COMMENT = 'ADD_COMMENT';
+const REMOVE_COMMENT = 'REMOVE_COMMENT';
+
+const createMovie = async(root, {movieID,title,genres,homepage,poster_path,backdrop_path,overview,vote_average,release_date,runtime,keyYt}) => {
     try{
-        const newMovie = await movieModel.create({movieID,title,poster_path,backdrop_path,overview,vote_average,release_date,keyYt});
+        const newMovie = await movieModel.create({movieID,title,genres,homepage,poster_path,backdrop_path,overview,vote_average,release_date,runtime,keyYt});
         return newMovie;
     }catch(err) {
         console.log(err);
@@ -14,7 +17,8 @@ const createMovie = async(root, {movieID,title,poster_path,backdrop_path,overvie
 
 const getAllMovie = async(root) => {
     try {
-        const movies = await movieModel.find({});
+        const movies = await movieModel.find({}).populate('owner').exec();
+        // console.log(movies)
         return movies;
     }catch(err) {
         console.log(err);
@@ -34,7 +38,7 @@ const deleteMovie = async(root,{id}) => {
 
 const getInfoMovie = async(root,{id}) => {
     try{
-        const movie = await movieModel.findOne({movieID: id});
+        const movie = await movieModel.findOne({movieID: id}).populate('comments.owner')
         return movie;
     }catch(err) {
         console.log(err);
@@ -42,17 +46,19 @@ const getInfoMovie = async(root,{id}) => {
     }
 }
 
-const updateMovie = async(root, {id,title,poster_path,backdrop_path,overview,vote_average,release_date,keyYt}) => {
+const updateMovie = async(root, {id,title,genres,homepage,poster_path,backdrop_path,overview,vote_average,release_date,runtime,keyYt}) => {
     try{
-        const dataChange = {id,title,poster_path,backdrop_path,overview,vote_average,release_date,keyYt};
+        const dataChange = {id,title,genres,homepage,poster_path,backdrop_path,overview,vote_average,release_date,runtime,keyYt};
         const movieUpdated = 
-                    await movieModel.findOne({movieID: id})
+                    await movieModel.findOne({movieID: id}).populate('comments.owner','-password')
                                     .then(movieFound => {
                                         for(key in dataChange){
-                                            movieFound[key] = dataChange[key];
+                                            if(dataChange[key] !== undefined)
+                                                movieFound[key] = dataChange[key];
                                         }
                                         return movieFound.save();
                                     })
+                                        // console.log(movieUpdated)
         return movieUpdated;
     }catch(err) {
         console.log(err);
@@ -108,6 +114,64 @@ const getMovieByID = async(root,{id}) => {
     }
 }
 
+//add comment user for movie
+const addComment = async(root, {idMovie,idUser,contentCmt}, {pubsub}) => {
+    try {
+        const title = contentCmt;
+        const owner = idUser;
+        const movieUpdated = await movieModel
+                                .findOneAndUpdate({movieID: idMovie}
+                                    ,{$push:{comments: {
+                                        $each: [{title,owner}],
+                                        $position: 0
+                                    }
+                                }}, {new : true})
+                                .populate('comments.owner','-password')
+        pubsub.publish(ADD_COMMENT, {addedComment: {
+           comments: [{
+            title: contentCmt,
+            owner: {
+                id: idUser,
+                username: movieUpdated.comments[movieUpdated.comments.length - 1].owner.username
+            },
+            createdAt: movieUpdated.comments[movieUpdated.comments.length - 1].createdAt
+            }]
+        }})
+        return movieUpdated;
+    }catch(err) {
+        console.log(err);
+        throw new Error(err.message);
+    }
+}
+
+//remove comment
+const deleteComment = async(root, {idMovie,idUser,time},{pubsub}) => {
+    try {
+        const timeConvert = new Date(time);
+        const movieUpdated = await movieModel.findOne({movieID: idMovie}).populate('comments.owner','-password')
+            .then(userFound => {
+                userFound.comments.map((comment,index) => {
+                    if(comment.owner._id.toString() === idUser && comment.createdAt.getTime()===timeConvert.getTime()){
+                        userFound.comments.splice(index,1);
+                    }
+                })
+                return userFound.save();
+            })
+        pubsub.publish(REMOVE_COMMENT,{removedComment: {
+            comments: [{
+                owner: {
+                    id: idUser
+                },
+                createdAt: time
+            }]
+        }})
+        return movieUpdated;
+    }catch(err) {
+        console.log(err);
+        return null;
+    }
+}
+
 module.exports = {
     createMovie,
     getAllMovie,
@@ -115,5 +179,7 @@ module.exports = {
     getInfoMovie,
     updateMovie,
     getAllKeyYt,
-    getMovieByID
+    getMovieByID,
+    addComment,
+    deleteComment
 }

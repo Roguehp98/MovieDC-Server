@@ -3,6 +3,7 @@ const userModel = require('../user/model');
 const ADD_LISTFV = 'ADD_LISTFV';
 const REMOVE_LISTFV = 'REMOVE_LISTFV';
 
+
 const addListFv = async(root, {idUser, idMovie, nameMovie,typeMovie},{pubsub}) => {
     try {
         const moviefv = {id: idMovie, name: nameMovie,type: typeMovie};
